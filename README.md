@@ -43,28 +43,29 @@
   * wsgi.py
 * .env
 * .gitignore
+* manage.py
 * Procfile
 * requirements.txt
 * requirements-dev.txt
 * runtime.txt
 
-### マイグレーションファイル
-* マイグレーションファイル
+### マイグレーション
+* マイグレーション
   ```
   $ python manage.py makemigrations
   $ python manage.py migrate 
   ```
 
-### superuser作成
-* superuser作成
+* superuser
   ```
   $ python manage.py createsuperuser
-  Username: super
-  Email address:
-  Password:
+  Username: *****
+  Email address: *****
+  Password: *****
   ```
 
 ## デプロイ
+### デプロイ設定
 * rest_api/wsgi.py
   ```
   import os
@@ -75,43 +76,54 @@
 
   application = Cling(get_wsgi_application())
   ```
-
 * requirements-dev.txt
   ```
   仮想環境にインストール済のモジュール一覧を作成
   $ pip freeze > requirements-dev.txt
   ```
-
-* 各種設定ファイル
-  * runtime.txt
-    ```
-    python-3.8.13
-    ```
-  * requirement.txt
-    ```
-    -r requirements-dev.txt
-    gunicorn
-    psycopg2==2.8.6
-    ```
-  * Procfile
-    ```
-    web: gunicorn rest_api.wsgi --log-file -
-    ```
-
+* runtime.txt
+  ```
+  python-3.8.13
+  ```
+* requirement.txt
+  ```
+  -r requirements-dev.txt
+  gunicorn
+  psycopg2==2.8.6
+  ```
+* Procfile
+  ```
+  web: gunicorn rest_api.wsgi --log-file -
+  ```
 * restapi/settings.pyにURLを追記
   ```
   ALLOWED_HOSTS = ['nextjs-hpapi.herokuapp.com']
   ```
 
-* Heroku CLI
+### Heroku CLI
   ```
   $ heroku git:remote -a nextjs-hpapi
   $ heroku config:push
   ```
 
-* Deploy
+## 本番環境
+### Heroku Deploy
   ```
   $ git add .
   $ git commit -m "initial commit to heroku"
   $ git push heroku master
+  ```
+
+### マイグレーション
+* マイグレーション
+  ```
+  $ heroku run python3 manage.py migrate
+  ```
+
+* superuser
+  ```
+  $ heroku run python3 manage.py createsuperuser
+  Username: ************
+  Email address: ************
+  Password: ************
   ```
